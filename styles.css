@@ -866,6 +866,7 @@ section:nth-child(odd)  { background: var(--bg-base); }
     opacity: 0;
     transition: opacity .35s;
     z-index: 1;
+    pointer-events: none;
 }
 
 .project-card:hover {
