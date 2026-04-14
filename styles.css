@@ -379,15 +379,24 @@ nav {
     animation: spin-slow 14s linear infinite;
 }
 
-.photo-frame img {
+.photo-clip {
     position: relative;
     z-index: 1;
     width: 100%;
     height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--bg-base);
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: top center;
-    border-radius: 50%;
-    border: 4px solid var(--bg-base);
+    transform: scale(1.2
+);
+    transform-origin: center center;
     display: block;
 }
 
