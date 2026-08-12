@@ -1,215 +1,455 @@
 /* =====================================================================
    KWESI BUABENG BORTEI | Portfolio Scripts
+   Everything is progressive: if a capability is missing (WebGL, fine
+   pointer, clipboard) the page still works, it just does less.
    ===================================================================== */
 
 (function () {
     'use strict';
 
-    /* ── SCROLL PROGRESS BAR ──────────────────────────────────────────── */
-    const scrollBar = document.getElementById('scroll-bar');
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var fine    = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    var narrow  = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
 
-    function updateScrollBar() {
-        const docHeight = document.body.offsetHeight - window.innerHeight;
-        const pct = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
-        scrollBar.style.width = Math.min(pct, 100) + '%';
-    }
+    var $  = function (sel, root) { return (root || document).querySelector(sel); };
+    var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
 
-    /* ── NAV SHADOW ON SCROLL ─────────────────────────────────────────── */
-    const navbar = document.getElementById('navbar');
+    /* ── A REFRESH SHOULD LAND AT THE TOP, NOT MID-PAGE ───────────────── */
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (!location.hash) window.scrollTo(0, 0);
 
-    function updateNav() {
-        navbar.style.boxShadow = window.scrollY > 60
-            ? '0 2px 30px rgba(0,0,0,.6), 0 0 20px rgba(37,99,235,.05)'
-            : 'none';
-    }
+    /* ── TEXT SPLITTING ───────────────────────────────────────────────── */
 
-    window.addEventListener('scroll', () => {
-        updateScrollBar();
-        updateNav();
-    }, { passive: true });
+    /* per-letter spans, used by the logo and the preloader name */
+    $$('[data-split]').forEach(function (el) {
+        var text = el.textContent.trim();
+        var frag = document.createDocumentFragment();
+        Array.prototype.forEach.call(text, function (ch, i) {
+            var s = document.createElement('span');
+            s.textContent = ch === ' ' ? ' ' : ch;
+            s.style.animationDelay = (i * 35) + 'ms';
+            frag.appendChild(s);
+        });
+        el.textContent = '';
+        el.appendChild(frag);
+    });
 
-    /* ── MOBILE MENU ──────────────────────────────────────────────────── */
-    const mobileBtn = document.getElementById('mobile-menu');
-    const navLinks  = document.getElementById('nav-links');
-    let menuOpen    = false;
+    /* hero name: every letter lifts on its own hover. Letters are grouped
+       per word so the browser can only break between words, never inside
+       one, which is exactly what a naive per-letter split gets wrong. */
+    $$('[data-chars]').forEach(function (el) {
+        var words = el.textContent.trim().split(/\s+/);
+        el.textContent = '';
+        words.forEach(function (word, wi) {
+            var wrap = document.createElement('span');
+            wrap.className = 'wd';
+            Array.prototype.forEach.call(word, function (ch) {
+                var s = document.createElement('span');
+                s.className = 'ch';
+                s.textContent = ch;
+                wrap.appendChild(s);
+            });
+            el.appendChild(wrap);
+            if (wi < words.length - 1) el.appendChild(document.createTextNode(' '));
+        });
+    });
 
-    function setMenu(open) {
-        menuOpen = open;
-        navLinks.classList.toggle('open', open);
-        const spans = mobileBtn.querySelectorAll('span');
-        if (open) {
-            spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-            spans[1].style.opacity   = '0';
-            spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-        } else {
-            spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+    /* headings arrive one word at a time; the inner <i> is what moves */
+    $$('[data-words]').forEach(function (el) {
+        var words = el.textContent.trim().split(/\s+/);
+        el.textContent = '';
+        words.forEach(function (w, i) {
+            var span = document.createElement('span');
+            span.className = 'word';
+            var inner = document.createElement('i');
+            inner.textContent = w;
+            span.appendChild(inner);
+            el.appendChild(span);
+            if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+        });
+    });
+
+    /* ── SECTION NUMBERING ────────────────────────────────────────────── */
+    /* written here so reordering sections never leaves a stale 03 behind */
+    var kickers = $$('.kicker');
+    kickers.forEach(function (k, i) {
+        k.setAttribute('data-num', ('0' + (i + 1)).slice(-2));
+    });
+    /* +1 because the hero carries no kicker but is still a section */
+    var total = ('0' + (kickers.length + 1)).slice(-2);
+    var navCountInit = $('#nav-count');
+    if (navCountInit) navCountInit.textContent = '01 / ' + total;
+
+    /* ── PRELOADER ────────────────────────────────────────────────────── */
+    var pre = $('#pre');
+    var didLock = false;
+
+    function clearPre() {
+        if (!pre) return;
+        pre.classList.add('done');
+        document.body.classList.remove('locked');
+        /* locking the body while the preloader is up throws away the jump
+           the browser made for a #section link, so land it again here */
+        if (didLock && location.hash) {
+            var target = document.querySelector(location.hash);
+            if (target) {
+                var offset = navbar ? navbar.offsetHeight + 8 : 0;
+                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: 'auto' });
+            }
         }
     }
 
-    mobileBtn.addEventListener('click', () => setMenu(!menuOpen));
-    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+    if (pre && !reduced) {
+        var preStart = Date.now(), MIN_PRE = 2000;
+        document.body.classList.add('locked');
+        didLock = true;
+        window.addEventListener('load', function () {
+            setTimeout(clearPre, Math.max(0, MIN_PRE - (Date.now() - preStart)));
+        });
+        setTimeout(clearPre, 4000);           // never let it trap the page
+    } else {
+        clearPre();
+    }
+
+    /* ── LIVE BACKGROUND: VANTA.NET ───────────────────────────────────── */
+    /* Greyscale on purpose. The lattice is atmosphere, not decoration to
+       compete with the copy, so it stays desaturated at every size. */
+    (function initVanta() {
+        var host = $('#livebg');
+        if (!host || reduced || !window.VANTA || !window.VANTA.NET) return;
+        try {
+            window.__vantaNet = window.VANTA.NET({
+                el: host,
+                mouseControls: fine,
+                touchControls: false,      // never fight the page scroll on phones
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0x3d434e,           // dim enough to sit under body copy
+                backgroundColor: 0x0e0e11,
+                points: narrow ? 6.00 : 9.00,
+                maxDistance: narrow ? 17.00 : 21.00,
+                spacing: narrow ? 20.00 : 16.00,
+                showDots: true
+            });
+        } catch (e) { /* leave the flat background in place */ }
+    })();
 
     /* ── REVEAL ON SCROLL ─────────────────────────────────────────────── */
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+    var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
-            const siblings = entry.target.parentElement
-                ? Array.from(entry.target.parentElement.querySelectorAll('.reveal:not(.visible)'))
-                : [];
-            const idx   = siblings.indexOf(entry.target);
-            const delay = idx >= 0 ? idx * 70 : 0;
-            setTimeout(() => entry.target.classList.add('visible'), delay);
+            var parent   = entry.target.parentElement;
+            var siblings = parent ? $$('.reveal:not(.visible)', parent) : [];
+            var idx      = siblings.indexOf(entry.target);
+            setTimeout(function () { entry.target.classList.add('visible'); }, idx > 0 ? idx * 70 : 0);
             revealObserver.unobserve(entry.target);
         });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    $$('.reveal').forEach(function (el) { revealObserver.observe(el); });
 
-    /* ── ACTIVE NAV HIGHLIGHT ─────────────────────────────────────────── */
-    const sections = Array.from(document.querySelectorAll('section[id]'));
-    const navAs    = Array.from(document.querySelectorAll('.nav-links a'));
-
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+    /* section headings play their word animation on entry */
+    var headObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
-            navAs.forEach(a => a.classList.remove('active'));
-            const active = navAs.find(a => a.getAttribute('href') === `#${entry.target.id}`);
-            if (active) active.classList.add('active');
+            entry.target.classList.add('in');
+            headObserver.unobserve(entry.target);
         });
-    }, { threshold: 0.35 });
+    }, { threshold: 0.25 });
 
-    sections.forEach(s => sectionObserver.observe(s));
+    $$('.sec-head').forEach(function (el) { headObserver.observe(el); });
 
-    /* ── SMOOTH SCROLL (offset for fixed nav) ─────────────────────────── */
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
+    /* ── STAT COUNT-UP ────────────────────────────────────────────────── */
+    var statObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el     = entry.target;
+            var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+            var suffix = el.getAttribute('data-suffix') || '';
+            statObserver.unobserve(el);
+
+            if (reduced) { el.textContent = target + suffix; return; }
+
+            var start = performance.now(), dur = 1100;
+            (function tick(now) {
+                var p = Math.min(1, (now - start) / dur);
+                var eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = Math.round(target * eased) + suffix;
+                if (p < 1) requestAnimationFrame(tick);
+            })(start);
+        });
+    }, { threshold: 0.6 });
+
+    $$('[data-count]').forEach(function (el) { statObserver.observe(el); });
+
+    /* ── NAV: STUCK STATE, SCROLL SPY, SECTION COUNTER ────────────────── */
+    var navbar   = $('#navbar');
+    var navCount = $('#nav-count');
+    var navAs    = $$('.nav-links a');
+    var sections = $$('section[id]');
+
+    function onScroll() {
+        if (navbar) navbar.classList.toggle('stuck', window.scrollY > 40);
+        updateProgress();
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var id = entry.target.id;
+            navAs.forEach(function (a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+            });
+            var i = sections.indexOf(entry.target);
+            if (navCount && i >= 0) navCount.textContent = ('0' + (i + 1)).slice(-2) + ' / ' + total;
+        });
+    }, { threshold: 0.3 });
+
+    sections.forEach(function (s) { spy.observe(s); });
+
+    /* ── MOBILE MENU ──────────────────────────────────────────────────── */
+    var mobileBtn = $('#mobile-menu');
+    var navLinks  = $('#nav-links');
+    var menuOpen  = false;
+
+    function setMenu(open) {
+        menuOpen = open;
+        if (navLinks) navLinks.classList.toggle('open', open);
+        document.body.classList.toggle('locked', open);
+        if (!mobileBtn) return;
+        var spans = mobileBtn.querySelectorAll('span');
+        if (open) {
+            spans[0].style.transform = 'translateY(3.5px) rotate(45deg)';
+            spans[1].style.transform = 'translateY(-3.5px) rotate(-45deg)';
+            spans[1].style.width = '100%';
+        } else {
+            spans[0].style.transform = '';
+            spans[1].style.transform = '';
+            spans[1].style.width = '';
+        }
+    }
+
+    if (mobileBtn) {
+        mobileBtn.addEventListener('click', function () { setMenu(!menuOpen); });
+        mobileBtn.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setMenu(!menuOpen); }
+        });
+    }
+    navAs.forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+
+    /* ── SMOOTH SCROLL WITH NAV OFFSET ────────────────────────────────── */
+    $$('a[href^="#"]').forEach(function (a) {
         a.addEventListener('click', function (e) {
-            const target = document.querySelector(this.getAttribute('href'));
+            var href = this.getAttribute('href');
+            if (!href || href === '#') return;
+            var target = document.querySelector(href);
             if (!target) return;
             e.preventDefault();
-            window.scrollTo({ top: target.offsetTop - navbar.offsetHeight - 12, behavior: 'smooth' });
+            var offset = navbar ? navbar.offsetHeight + 8 : 0;
+            window.scrollTo({
+                top: target.getBoundingClientRect().top + window.scrollY - offset,
+                behavior: reduced ? 'auto' : 'smooth'
+            });
         });
     });
 
+    /* ── BACK TO TOP, WITH READING PROGRESS DRAWN AROUND IT ───────────── */
+    var toTop = $('#to-top');
+    var ring  = $('#to-top-ring');
+    var CIRC  = 2 * Math.PI * 23;
+
+    if (ring) {
+        ring.style.strokeDasharray  = CIRC;
+        ring.style.strokeDashoffset = CIRC;
+    }
+
+    function updateProgress() {
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        var pct = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+        if (ring) ring.style.strokeDashoffset = CIRC * (1 - pct);
+        if (toTop) toTop.classList.toggle('on', window.scrollY > window.innerHeight * 0.6);
+    }
+
+    if (toTop) {
+        toTop.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+        });
+    }
+
+    /* ── POINTER LAYER (fine pointers only) ───────────────────────────── */
+    if (fine && !reduced) {
+        var dot   = $('#cur-dot');
+        var ringEl = $('#cur-ring');
+        var label = $('#ptr-label');
+        var mx = -200, my = -200, rx = -200, ry = -200;
+        var shown = false;
+
+        document.addEventListener('mousemove', function (e) {
+            mx = e.clientX; my = e.clientY;
+            if (!shown) {
+                [dot, ringEl].forEach(function (el) { if (el) el.style.opacity = '1'; });
+                shown = true;
+            }
+            if (dot) dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+            if (label) label.style.transform = label.classList.contains('on')
+                ? 'translate(' + (mx + 26) + 'px,' + (my + 22) + 'px) scale(1)'
+                : 'translate(' + (mx + 26) + 'px,' + (my + 22) + 'px) scale(.7)';
+        });
+
+        document.addEventListener('mouseleave', function () {
+            [dot, ringEl].forEach(function (el) { if (el) el.style.opacity = '0'; });
+            shown = false;
+        });
+
+        (function follow() {
+            rx += (mx - rx) * 0.16;
+            ry += (my - ry) * 0.16;
+            if (ringEl) ringEl.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
+            requestAnimationFrame(follow);
+        })();
+
+        var HOT = 'a, button, [role="button"], input, textarea, select, .tag, .copy';
+
+        document.addEventListener('mouseover', function (e) {
+            var hot = e.target.closest(HOT);
+            if (ringEl) ringEl.classList.toggle('hot', !!hot);
+            var labelled = e.target.closest('[data-label]');
+            if (label && labelled) {
+                label.textContent = labelled.getAttribute('data-label');
+                label.classList.add('on');
+            }
+        });
+
+        document.addEventListener('mouseout', function (e) {
+            if (e.target.closest(HOT) && ringEl) ringEl.classList.remove('hot');
+            if (e.target.closest('[data-label]') && label) label.classList.remove('on');
+        });
+
+        /* pointer-following highlight on cards */
+        $$('[data-spot]').forEach(function (card) {
+            card.addEventListener('mousemove', function (e) {
+                var r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+            });
+        });
+
+        /* gentle 3D tilt */
+        $$('[data-tilt]').forEach(function (el) {
+            el.addEventListener('mousemove', function (e) {
+                var r  = el.getBoundingClientRect();
+                var px = (e.clientX - r.left) / r.width - 0.5;
+                var py = (e.clientY - r.top) / r.height - 0.5;
+                el.style.transform = 'perspective(900px) rotateX(' + (-py * 4).toFixed(2) + 'deg) rotateY(' + (px * 4).toFixed(2) + 'deg)';
+            });
+            el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+        });
+
+        /* magnetic buttons */
+        $$('[data-magnetic]').forEach(function (el) {
+            el.addEventListener('mousemove', function (e) {
+                var r = el.getBoundingClientRect();
+                var x = e.clientX - r.left - r.width / 2;
+                var y = e.clientY - r.top - r.height / 2;
+                el.style.transform = 'translate(' + (x * 0.18).toFixed(2) + 'px,' + (y * 0.28).toFixed(2) + 'px)';
+            });
+            el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+        });
+    }
+
+    /* ── COPY THE EMAIL ───────────────────────────────────────────────── */
+    var copyBtn = $('#copy-email');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+            var addr = copyBtn.getAttribute('data-email');
+            var done = function () {
+                copyBtn.textContent = 'Copied';
+                setTimeout(function () { copyBtn.textContent = 'Copy'; }, 1800);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(addr).then(done, function () { window.location.href = 'mailto:' + addr; });
+            } else {
+                window.location.href = 'mailto:' + addr;
+            }
+        });
+    }
+
+    /* ── LOCAL TIME IN ACCRA ──────────────────────────────────────────── */
+    var timeEl = $('#local-time');
+    if (timeEl) {
+        (function tickClock() {
+            try {
+                var t = new Date().toLocaleTimeString('en-GB', {
+                    timeZone: 'Africa/Accra', hour: '2-digit', minute: '2-digit'
+                });
+                timeEl.textContent = t + ' in Accra, Ghana';
+            } catch (e) {
+                timeEl.textContent = 'Accra, Ghana';
+            }
+            setTimeout(tickClock, 30000);
+        })();
+    }
+
+    /* ── MESSAGE COUNTER ──────────────────────────────────────────────── */
+    var message = $('#message');
+    var counter = $('#char-count');
+    if (message && counter) {
+        message.addEventListener('input', function () {
+            counter.textContent = message.value.length + ' / 600';
+        });
+    }
+
     /* ── CONTACT FORM ─────────────────────────────────────────────────── */
-    const contactForm = document.getElementById('contact-form');
+    /* There is no backend here, so rather than pretend, hand the message
+       to the visitor's mail client with everything already filled in. */
+    var contactForm = $('#contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            const btn  = this.querySelector('button[type="submit"]');
-            const orig = btn.innerHTML;
-            btn.innerHTML        = '<i class="fas fa-check"></i> Message Sent!';
-            btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
-            btn.style.boxShadow  = '0 0 20px rgba(34,197,94,.35)';
-            btn.disabled         = true;
-            setTimeout(() => {
-                btn.innerHTML       = orig;
-                btn.style.background = '';
-                btn.style.boxShadow  = '';
-                btn.disabled        = false;
-                this.reset();
-            }, 3500);
+            var btn  = contactForm.querySelector('button[type="submit"]');
+            var orig = btn ? btn.innerHTML : '';
+            var name    = ($('#name')    || {}).value || '';
+            var email   = ($('#email')   || {}).value || '';
+            var subject = ($('#subject') || {}).value || 'Portfolio enquiry';
+            var body    = (message ? message.value : '') + '\n\n' + name + '\n' + email;
+
+            window.location.href = 'mailto:officialkingbee2@gmail.com'
+                + '?subject=' + encodeURIComponent(subject)
+                + '&body='    + encodeURIComponent(body);
+
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-check"></i> Opening your mail app';
+                btn.disabled  = true;
+                setTimeout(function () {
+                    btn.innerHTML = orig;
+                    btn.disabled  = false;
+                }, 3000);
+            }
         });
     }
 
     /* ── PHOTO FALLBACK ───────────────────────────────────────────────── */
-    const profileImg = document.getElementById('profile-img');
+    var profileImg = $('#profile-img');
     if (profileImg) {
         profileImg.addEventListener('error', function () {
-            const frame = this.closest('.photo-frame');
-            if (!frame) return;
-            this.remove();
-            const initials = document.createElement('div');
-            initials.style.cssText = `
-                width:100%;height:100%;border-radius:50%;
-                background:linear-gradient(135deg,#1d4ed8,#4f46e5);
-                display:flex;align-items:center;justify-content:center;
-                font-size:3.2rem;font-weight:800;color:#fff;
-                font-family:'Inter',sans-serif;letter-spacing:-2px;
-                position:relative;z-index:1;
-            `;
+            var clip = profileImg.closest('.photo-clip');
+            if (!clip) return;
+            profileImg.remove();
+            var initials = document.createElement('div');
+            initials.style.cssText = 'width:100%;height:100%;display:grid;place-items:center;'
+                + 'font-size:3rem;font-weight:600;letter-spacing:-.04em;color:#6c6d78;';
             initials.textContent = 'KB';
-            frame.appendChild(initials);
+            clip.appendChild(initials);
         });
-    }
-
-    /* ── CURSOR TRAIL (fine-pointer / mouse only) ─────────────────────── */
-    if (window.matchMedia('(pointer: fine)').matches) {
-
-        const ct = [
-            document.getElementById('ct1'),
-            document.getElementById('ct2'),
-            document.getElementById('ct3'),
-        ];
-
-        /* Each bubble tracks the one before it with different lag */
-        const pos = [
-            { x: -100, y: -100 },
-            { x: -100, y: -100 },
-            { x: -100, y: -100 },
-        ];
-        /* Higher = snappier. ct1 leads, ct3 lags most */
-        const speeds = [0.20, 0.13, 0.08];
-
-        let mouseX = -100;
-        let mouseY = -100;
-        let visible = false;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            if (!visible) {
-                ct.forEach(el => el && (el.style.opacity = '1'));
-                visible = true;
-            }
-        });
-
-        /* Hide trail when cursor leaves the window */
-        document.addEventListener('mouseleave', () => {
-            ct.forEach(el => el && (el.style.opacity = '0'));
-            visible = false;
-        });
-
-        /* Grow cursor near clickable elements */
-        document.addEventListener('mouseover', (e) => {
-            if (e.target.closest('a, button, [role="button"], input, textarea, select')) {
-                ct[0] && (ct[0].style.transform = 'translate(-50%,-50%) scale(1.6)');
-                ct[1] && (ct[1].style.transform = 'translate(-50%,-50%) scale(1.3)');
-            }
-        });
-
-        document.addEventListener('mouseout', (e) => {
-            if (e.target.closest('a, button, [role="button"], input, textarea, select')) {
-                ct[0] && (ct[0].style.transform = 'translate(-50%,-50%) scale(1)');
-                ct[1] && (ct[1].style.transform = 'translate(-50%,-50%) scale(1)');
-            }
-        });
-
-        function animateCursor() {
-            /* ct1 follows the mouse */
-            pos[0].x += (mouseX - pos[0].x) * speeds[0];
-            pos[0].y += (mouseY - pos[0].y) * speeds[0];
-
-            /* ct2 follows ct1, ct3 follows ct2 */
-            for (let i = 1; i < 3; i++) {
-                pos[i].x += (pos[i - 1].x - pos[i].x) * speeds[i];
-                pos[i].y += (pos[i - 1].y - pos[i].y) * speeds[i];
-            }
-
-            ct.forEach((el, i) => {
-                if (el) {
-                    el.style.left = pos[i].x + 'px';
-                    el.style.top  = pos[i].y + 'px';
-                }
-            });
-
-            requestAnimationFrame(animateCursor);
-        }
-
-        animateCursor();
     }
 
     /* ── FOOTER YEAR ──────────────────────────────────────────────────── */
-    const yearEl = document.getElementById('footer-year');
+    var yearEl = $('#footer-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 })();

@@ -5,28 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kwesi Buabeng Bortei | Full-Stack Developer &amp; Startup Engineer</title>
     <meta name="description" content="Full-Stack Developer, Prompt Engineer, React &amp; React Native, Founder of Eukora, Head of Engineering at Chopa.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0e0e11">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- Cursor trail bubbles (hidden on touch devices via CSS) -->
-<div class="cursor-trail" id="ct1"></div>
-<div class="cursor-trail" id="ct2"></div>
-<div class="cursor-trail" id="ct3"></div>
+<!-- ================================================================
+     PRELOADER
+     ================================================================ -->
+<div id="pre">
+    <div class="pre-inner">
+        <div class="pre-name" data-split>Kwesi Buabeng Bortei</div>
+        <div class="pre-role">Full-Stack Developer</div>
+        <div class="pre-line"></div>
+    </div>
+</div>
 
 <!-- ================================================================
-     SCROLL PROGRESS
+     LIVE BACKGROUND (VANTA.NET mounts into #livebg)
      ================================================================ -->
-<div id="scroll-bar"></div>
+<div class="livebg" id="livebg" aria-hidden="true">
+    <div class="scrim"></div>
+    <div class="grain"></div>
+</div>
+
+<!-- Cursor (fine pointers only) -->
+<div class="cur-dot" id="cur-dot" aria-hidden="true"></div>
+<div class="cur-ring" id="cur-ring" aria-hidden="true"></div>
+<div id="ptr-label" aria-hidden="true"></div>
 
 <!-- ================================================================
      NAVIGATION
      ================================================================ -->
 <nav id="navbar">
     <div class="nav-inner">
-        <a href="#home" class="logo">&lt;KB /&gt;</a>
+        <a href="#home" class="logo" data-split>&lt;KB /&gt;</a>
         <ul class="nav-links" id="nav-links">
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Skills</a></li>
@@ -35,8 +52,9 @@
             <li><a href="#building">Building</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-        <div class="mobile-menu" id="mobile-menu" aria-label="Toggle menu" role="button">
-            <span></span><span></span><span></span>
+        <div class="nav-count" id="nav-count">01 / 07</div>
+        <div class="mobile-menu" id="mobile-menu" aria-label="Toggle menu" role="button" tabindex="0">
+            <span></span><span></span>
         </div>
     </div>
 </nav>
@@ -45,60 +63,60 @@
      HERO
      ================================================================ -->
 <section class="hero" id="home">
-    <div class="hero-bg-grid"></div>
     <div class="container">
         <div class="hero-content">
 
-            <!-- Text -->
             <div class="hero-text">
-                <div class="hero-badge">
+                <div class="hero-badge reveal">
                     <span class="dot"></span>
                     Open to roles &amp; collaborations
                 </div>
-                <h1>Kwesi Buabeng<br><span>Bortei</span></h1>
-                <p class="hero-tagline">
+
+                <h1>
+                    <span class="ln" data-chars>Kwesi Buabeng</span>
+                    <span class="ln thin" data-chars>Bortei</span>
+                </h1>
+
+                <p class="hero-tagline reveal">
                     <strong>Full-Stack Developer &amp; Startup Engineer</strong> building scalable
                     digital products across web and mobile. Founder of
-                    <a href="https://eukora.com" target="_blank" rel="noopener">Eukora</a>.
+                    <a href="https://eukora.com" target="_blank" rel="noopener" data-label="Open">Eukora</a>.
                     Head of Engineering at <strong>Chopa</strong>.
                     Prompt Engineer. <strong>Hybrid coder</strong>.
                 </p>
-                <div class="hero-stats">
+
+                <div class="hero-stats reveal">
                     <div class="stat-item">
-                        <div class="stat-num">2+</div>
+                        <div class="stat-num" data-count="2" data-suffix="+">0</div>
                         <div class="stat-label">Startups</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-num">4+</div>
+                        <div class="stat-num" data-count="4" data-suffix="+">0</div>
                         <div class="stat-label">Companies</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-num">6+</div>
+                        <div class="stat-num" data-count="6" data-suffix="+">0</div>
                         <div class="stat-label">Projects Shipped</div>
                     </div>
                 </div>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">
-                        <i class="fas fa-code"></i> View My Work
+
+                <div class="hero-buttons reveal">
+                    <a href="#projects" class="btn btn-primary" data-magnetic data-label="Scroll">
+                        <i class="fas fa-arrow-down"></i> View My Work
                     </a>
-                    <a href="#contact" class="btn btn-outline">
+                    <a href="#contact" class="btn btn-outline" data-magnetic data-label="Write">
                         <i class="fas fa-paper-plane"></i> Get In Touch
                     </a>
                 </div>
+
+                <div class="scroll-hint reveal">
+                    <span class="bar"></span> Scroll
+                </div>
             </div>
 
-            <!-- Photo with orbiting bubbles -->
-            <div class="hero-photo">
-                <div class="photo-orb-container">
-                    <!-- Orbiting blue bubbles -->
-                    <div class="orb orb-a"></div>
-                    <div class="orb orb-b"></div>
-                    <div class="orb orb-c"></div>
-                    <div class="orb orb-d"></div>
-                    <div class="orb orb-e"></div>
-                    <div class="orb orb-f"></div>
-                    <!-- Photo -->
-                    <div class="photo-frame">
+            <div class="hero-photo reveal">
+                <div>
+                    <div class="photo-frame" data-tilt>
                         <div class="photo-clip">
                             <img
                                 id="profile-img"
@@ -106,6 +124,10 @@
                                 alt="Kwesi Buabeng Bortei"
                             >
                         </div>
+                    </div>
+                    <div class="photo-caption">
+                        <span>Accra, Ghana</span>
+                        <span>KNUST</span>
                     </div>
                 </div>
             </div>
@@ -119,38 +141,44 @@
      ================================================================ -->
 <section id="about">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="section-label">About Me</span>
-            <h2 class="section-title">From first HTML tag to engineering lead</h2>
-            <p class="section-sub">A growth story driven by curiosity, real-world execution, and a hunger to build things that matter.</p>
+        <div class="sec-head">
+            <span class="kicker" data-num="">About Me</span>
+            <h2 class="sec-title" data-words>From first HTML tag to engineering lead</h2>
+            <p class="sec-sub reveal">A growth story driven by curiosity, real-world execution, and a hunger to build things that matter.</p>
         </div>
 
         <div class="about-grid">
-            <div class="about-sidebar">
-                <div class="info-card reveal">
-                    <div class="label">Current Role</div>
-                    <div class="value">Head of Engineering</div>
-                    <div class="sub">Chopa</div>
-                </div>
-                <div class="info-card reveal">
-                    <div class="label">Founded</div>
-                    <div class="value">Eukora</div>
-                    <div class="sub"><a href="https://eukora.com" target="_blank" rel="noopener">eukora.com</a> &middot; EdTech</div>
-                </div>
-                <div class="info-card reveal">
-                    <div class="label">Education</div>
-                    <div class="value">Computer Science</div>
-                    <div class="sub">KNUST</div>
-                </div>
-                <div class="info-card reveal">
-                    <div class="label">GitHub</div>
-                    <div class="value">kbbortei1</div>
-                    <div class="sub"><a href="https://github.com/kbbortei1" target="_blank" rel="noopener">github.com/kbbortei1</a></div>
-                </div>
-                <div class="info-card reveal">
-                    <div class="label">LinkedIn</div>
-                    <div class="value">Kwesi Bortei</div>
-                    <div class="sub"><a href="https://www.linkedin.com/in/kwesi-bortei-652675356/" target="_blank" rel="noopener">View Profile &rarr;</a></div>
+            <div class="about-sidebar reveal">
+                <div class="meta-list">
+                    <div class="meta-row">
+                        <span class="label">Current Role</span>
+                        <span class="value">Head of Engineering<small>Chopa</small></span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="label">Founded</span>
+                        <span class="value">
+                            <a href="https://eukora.com" target="_blank" rel="noopener" data-label="Open">Eukora</a>
+                            <small>eukora.com &middot; EdTech</small>
+                        </span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="label">Education</span>
+                        <span class="value">Computer Science<small>KNUST</small></span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="label">GitHub</span>
+                        <span class="value">
+                            <a href="https://github.com/kbbortei1" target="_blank" rel="noopener" data-label="Open">kbbortei1</a>
+                            <small>github.com/kbbortei1</small>
+                        </span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="label">LinkedIn</span>
+                        <span class="value">
+                            <a href="https://www.linkedin.com/in/kwesi-bortei-652675356/" target="_blank" rel="noopener" data-label="Open">Kwesi Bortei</a>
+                            <small>View profile</small>
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -163,7 +191,7 @@
                     building real products used by real people.
                 </p>
                 <p>
-                    I'm the <strong>Founder of <a href="https://eukora.com" target="_blank" rel="noopener">Eukora</a></strong>,
+                    I'm the <strong>Founder of <a href="https://eukora.com" target="_blank" rel="noopener" data-label="Open">Eukora</a></strong>,
                     an EdTech startup where I'm designing and building an AI-powered learning platform from the ground up.
                     Simultaneously, I serve as <strong>Head of Engineering at Chopa</strong>, where I architect systems,
                     lead the dev team, and translate business requirements into shipped software.
@@ -181,30 +209,26 @@
                     <strong>Ghana Water Company</strong>. I don't just write code. I own products, solve problems, and ship.
                 </p>
 
-                <div class="journey-timeline">
+                <div class="journey">
                     <div class="j-item">
-                        <div class="j-icon"><i class="fas fa-play"></i></div>
                         <div class="j-text">
                             <h4>Started with HTML, CSS &amp; JavaScript</h4>
                             <p>Built the foundation: DOM manipulation, responsive layouts, vanilla JS</p>
                         </div>
                     </div>
                     <div class="j-item">
-                        <div class="j-icon"><i class="fas fa-laptop-code"></i></div>
                         <div class="j-text">
                             <h4>Levelled up to React &amp; TypeScript</h4>
                             <p>Completed Full Stack Bootcamp, started shipping component-based UIs</p>
                         </div>
                     </div>
                     <div class="j-item">
-                        <div class="j-icon"><i class="fas fa-robot"></i></div>
                         <div class="j-text">
                             <h4>Became a Hybrid Engineer &amp; Prompt Engineer</h4>
                             <p>Mastered AI-assisted and vibe coding to ship faster without sacrificing quality</p>
                         </div>
                     </div>
                     <div class="j-item">
-                        <div class="j-icon"><i class="fas fa-rocket"></i></div>
                         <div class="j-text">
                             <h4>Founded Eukora &amp; joined Chopa as Head of Engineering</h4>
                             <p>Operating at startup level: architecting, leading, and shipping</p>
@@ -221,17 +245,19 @@
      ================================================================ -->
 <section id="skills">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="section-label">Skills &amp; Stack</span>
-            <h2 class="section-title">Technologies I work with</h2>
-            <p class="section-sub">A practical stack built through real projects, not just tutorials.</p>
+        <div class="sec-head">
+            <span class="kicker" data-num="">Skills &amp; Stack</span>
+            <h2 class="sec-title" data-words>Technologies I work with</h2>
+            <p class="sec-sub reveal">A practical stack built through real projects, not just tutorials.</p>
         </div>
+
         <div class="skills-grid">
 
             <div class="skill-card reveal">
                 <div class="skill-card-header">
-                    <div class="skill-icon"><i class="fas fa-layer-group"></i></div>
+                    <span class="skill-icon"><i class="fas fa-layer-group"></i></span>
                     <h3>Frontend</h3>
+                    <span class="idx">01</span>
                 </div>
                 <div class="tag-group">
                     <span class="tag">React</span>
@@ -246,8 +272,9 @@
 
             <div class="skill-card reveal">
                 <div class="skill-card-header">
-                    <div class="skill-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <span class="skill-icon"><i class="fas fa-mobile-alt"></i></span>
                     <h3>Mobile</h3>
+                    <span class="idx">02</span>
                 </div>
                 <div class="tag-group">
                     <span class="tag">React Native</span>
@@ -258,8 +285,9 @@
 
             <div class="skill-card reveal">
                 <div class="skill-card-header">
-                    <div class="skill-icon"><i class="fas fa-server"></i></div>
+                    <span class="skill-icon"><i class="fas fa-server"></i></span>
                     <h3>Backend</h3>
+                    <span class="idx">03</span>
                 </div>
                 <div class="tag-group">
                     <span class="tag">Node.js</span>
@@ -271,8 +299,9 @@
 
             <div class="skill-card reveal">
                 <div class="skill-card-header">
-                    <div class="skill-icon"><i class="fas fa-code"></i></div>
+                    <span class="skill-icon"><i class="fas fa-code"></i></span>
                     <h3>Languages</h3>
+                    <span class="idx">04</span>
                 </div>
                 <div class="tag-group">
                     <span class="tag">JavaScript / TypeScript</span>
@@ -281,11 +310,11 @@
                 </div>
             </div>
 
-            <!-- NEW: Prompt Engineering & AI -->
             <div class="skill-card reveal">
                 <div class="skill-card-header">
-                    <div class="skill-icon"><i class="fas fa-robot"></i></div>
+                    <span class="skill-icon"><i class="fas fa-robot"></i></span>
                     <h3>AI &amp; Prompt Engineering</h3>
+                    <span class="idx">05</span>
                 </div>
                 <div class="tag-group">
                     <span class="tag">Prompt Engineering</span>
@@ -299,8 +328,9 @@
 
             <div class="skill-card reveal">
                 <div class="skill-card-header">
-                    <div class="skill-icon"><i class="fas fa-tools"></i></div>
+                    <span class="skill-icon"><i class="fas fa-tools"></i></span>
                     <h3>Tools &amp; Workflow</h3>
+                    <span class="idx">06</span>
                 </div>
                 <div class="tag-group">
                     <span class="tag">Git &amp; GitHub</span>
@@ -313,8 +343,9 @@
 
             <div class="skill-card reveal">
                 <div class="skill-card-header">
-                    <div class="skill-icon"><i class="fas fa-lightbulb"></i></div>
+                    <span class="skill-icon"><i class="fas fa-lightbulb"></i></span>
                     <h3>Currently Deepening</h3>
+                    <span class="idx">07</span>
                 </div>
                 <div class="tag-group">
                     <span class="tag">System Design</span>
@@ -333,11 +364,12 @@
      ================================================================ -->
 <section id="experience">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="section-label">Experience</span>
-            <h2 class="section-title">Where I've worked &amp; built</h2>
-            <p class="section-sub">Real roles. Real products. Real impact.</p>
+        <div class="sec-head">
+            <span class="kicker" data-num="">Experience</span>
+            <h2 class="sec-title" data-words>Where I've worked and built</h2>
+            <p class="sec-sub reveal">Real roles. Real products. Real impact.</p>
         </div>
+
         <div class="exp-list">
 
             <div class="exp-item reveal">
@@ -374,7 +406,7 @@
                 </div>
                 <div class="exp-body">
                     <div class="exp-title">Founder &amp; Lead Developer</div>
-                    <p class="exp-desc">Founded <a href="https://eukora.com" target="_blank" rel="noopener" style="color:var(--blue-400);font-weight:700;text-decoration:none">Eukora</a>, an EdTech startup building an AI-powered learning platform to make quality education more accessible and personalised.</p>
+                    <p class="exp-desc">Founded <a href="https://eukora.com" target="_blank" rel="noopener" data-label="Open">Eukora</a>, an EdTech startup building an AI-powered learning platform to make quality education more accessible and personalised.</p>
                     <ul class="exp-bullets">
                         <li>Defined the product vision and designed the overall system architecture</li>
                         <li>Built the platform end-to-end: landing page (eukora.com), mobile MVP, and backend APIs</li>
@@ -447,156 +479,157 @@
      ================================================================ -->
 <section id="projects">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="section-label">Projects</span>
-            <h2 class="section-title">Things I've built</h2>
-            <p class="section-sub">Real problems, real solutions, from startup products to personal builds.</p>
+        <div class="sec-head">
+            <span class="kicker" data-num="">Projects</span>
+            <h2 class="sec-title" data-words>Things I've built</h2>
+            <p class="sec-sub reveal">Real problems, real solutions, from startup products to personal builds.</p>
         </div>
+
         <div class="projects-grid">
 
-            <div class="project-card reveal">
-                <div class="project-banner b1"><i class="fas fa-globe"></i></div>
-                <div class="project-body">
+            <div class="project-card reveal" data-tilt data-spot>
+                <div class="project-top">
                     <div class="project-role">Founder &amp; Designer</div>
-                    <h3>Eukora Landing Page</h3>
-                    <p>The public face of Eukora. A clean, conversion-focused landing page built to communicate the product vision and capture early users ahead of the full app launch.</p>
-                    <div class="project-problem">
-                        <span>Live at</span>
-                        <p>eukora.com, designed to convert visitors into early adopters.</p>
+                    <div class="project-idx">01</div>
+                </div>
+                <h3>Eukora Landing Page</h3>
+                <p>The public face of Eukora. A clean, conversion-focused landing page built to communicate the product vision and capture early users ahead of the full app launch.</p>
+                <div class="project-problem">
+                    <span>Live at</span>
+                    <p>eukora.com, designed to convert visitors into early adopters.</p>
+                </div>
+                <div class="tag-group" style="margin-bottom:1.2rem">
+                    <span class="tag">HTML / CSS</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">UI Design</span>
+                    <span class="tag">Product Marketing</span>
+                </div>
+                <div class="project-footer">
+                    <div class="project-links">
+                        <a href="https://eukora.com" target="_blank" rel="noopener" data-label="Open"><i class="fas fa-arrow-up-right-from-square"></i> Live Site</a>
                     </div>
-                    <div class="tag-group" style="margin-bottom:.9rem">
-                        <span class="tag">HTML / CSS</span>
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">UI Design</span>
-                        <span class="tag">Product Marketing</span>
-                    </div>
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="https://eukora.com" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Live Site</a>
-                        </div>
-                        <span class="badge-live">Live</span>
-                    </div>
+                    <span class="badge-live">Live</span>
                 </div>
             </div>
 
-            <div class="project-card reveal">
-                <div class="project-banner b3"><i class="fas fa-graduation-cap"></i></div>
-                <div class="project-body">
+            <div class="project-card reveal" data-tilt data-spot>
+                <div class="project-top">
                     <div class="project-role">Founder &amp; Lead Developer</div>
-                    <h3>Eukora Mobile App MVP</h3>
-                    <p>The first working version of the Eukora mobile app, an AI-powered learning platform built with React Native targeting students across Ghana and beyond.</p>
-                    <div class="project-problem">
-                        <span>Problem Solved</span>
-                        <p>Generic, one-size-fits-all education that doesn't adapt to how individual students actually learn.</p>
+                    <div class="project-idx">02</div>
+                </div>
+                <h3>Eukora Mobile App MVP</h3>
+                <p>The first working version of the Eukora mobile app, an AI-powered learning platform built with React Native targeting students across Ghana and beyond.</p>
+                <div class="project-problem">
+                    <span>Problem Solved</span>
+                    <p>Generic, one-size-fits-all education that doesn't adapt to how individual students actually learn.</p>
+                </div>
+                <div class="tag-group" style="margin-bottom:1.2rem">
+                    <span class="tag">React Native</span>
+                    <span class="tag">Expo</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">AI Integration</span>
+                </div>
+                <div class="project-footer">
+                    <div class="project-links">
+                        <a href="https://whatsapp.com/channel/0029VbC7ub60lwgyRhhbCU01" target="_blank" rel="noopener" data-label="Open"><i class="fab fa-whatsapp"></i> Channel</a>
+                        <a href="https://eukora.com" target="_blank" rel="noopener" data-label="Join"><i class="fas fa-arrow-up-right-from-square"></i> Waitlist</a>
                     </div>
-                    <div class="tag-group" style="margin-bottom:.9rem">
-                        <span class="tag">React Native</span>
-                        <span class="tag">Expo</span>
-                        <span class="tag">Node.js</span>
-                        <span class="tag">AI Integration</span>
-                    </div>
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="https://whatsapp.com/channel/0029VbC7ub60lwgyRhhbCU01" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> WhatsApp Channel</a>
-                            <a href="https://eukora.com" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Join Waitlist</a>
-                        </div>
-                        <span class="badge-wip">MVP</span>
-                    </div>
+                    <span class="badge-wip">MVP</span>
                 </div>
             </div>
 
-            <div class="project-card reveal">
-                <div class="project-banner b5"><i class="fas fa-dice"></i></div>
-                <div class="project-body">
+            <div class="project-card reveal" data-tilt data-spot>
+                <div class="project-top">
                     <div class="project-role">Solo Developer</div>
-                    <h3>Dicee Dice Game</h3>
-                    <p>A classic two-player dice game built with vanilla JavaScript. Each page refresh randomises both players' dice and declares a winner, with a polished UI and clean logic.</p>
-                    <div class="project-problem">
-                        <span>What It Demonstrates</span>
-                        <p>Solid JS fundamentals: random logic, DOM manipulation, event-driven code without any frameworks.</p>
-                    </div>
-                    <div class="tag-group" style="margin-bottom:.9rem">
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">HTML5</span>
-                        <span class="tag">CSS3</span>
-                        <span class="tag">DOM Manipulation</span>
-                    </div>
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="https://github.com/kbbortei1/Dicee-Game1" target="_blank" rel="noopener"><i class="fab fa-github"></i> View Code</a>
-                        </div>
+                    <div class="project-idx">03</div>
+                </div>
+                <h3>Dicee Dice Game</h3>
+                <p>A classic two-player dice game built with vanilla JavaScript. Each page refresh randomises both players' dice and declares a winner, with a polished UI and clean logic.</p>
+                <div class="project-problem">
+                    <span>What It Demonstrates</span>
+                    <p>Solid JS fundamentals: random logic, DOM manipulation, event-driven code without any frameworks.</p>
+                </div>
+                <div class="tag-group" style="margin-bottom:1.2rem">
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">HTML5</span>
+                    <span class="tag">CSS3</span>
+                    <span class="tag">DOM Manipulation</span>
+                </div>
+                <div class="project-footer">
+                    <div class="project-links">
+                        <a href="https://github.com/kbbortei1/Dicee-Game1" target="_blank" rel="noopener" data-label="Code"><i class="fab fa-github"></i> View Code</a>
                     </div>
                 </div>
             </div>
 
-            <div class="project-card reveal">
-                <div class="project-banner b4"><i class="fas fa-users"></i></div>
-                <div class="project-body">
+            <div class="project-card reveal" data-tilt data-spot>
+                <div class="project-top">
                     <div class="project-role">Solo Developer</div>
-                    <h3>Mini Social</h3>
-                    <p>A lightweight social platform where users can post updates, interact with others, and browse a live feed, built to explore the fundamentals of social app architecture.</p>
-                    <div class="project-problem">
-                        <span>What It Demonstrates</span>
-                        <p>Dynamic content rendering, user interaction flows, and clean UI structure without a heavy framework.</p>
-                    </div>
-                    <div class="tag-group" style="margin-bottom:.9rem">
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">HTML5</span>
-                        <span class="tag">CSS3</span>
-                        <span class="tag">DOM Manipulation</span>
-                    </div>
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="https://github.com/kbbortei1/Mini-Social" target="_blank" rel="noopener"><i class="fab fa-github"></i> View Code</a>
-                        </div>
+                    <div class="project-idx">04</div>
+                </div>
+                <h3>Mini Social</h3>
+                <p>A lightweight social platform where users can post updates, interact with others, and browse a live feed, built to explore the fundamentals of social app architecture.</p>
+                <div class="project-problem">
+                    <span>What It Demonstrates</span>
+                    <p>Dynamic content rendering, user interaction flows, and clean UI structure without a heavy framework.</p>
+                </div>
+                <div class="tag-group" style="margin-bottom:1.2rem">
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">HTML5</span>
+                    <span class="tag">CSS3</span>
+                    <span class="tag">DOM Manipulation</span>
+                </div>
+                <div class="project-footer">
+                    <div class="project-links">
+                        <a href="https://github.com/kbbortei1/Mini-Social" target="_blank" rel="noopener" data-label="Code"><i class="fab fa-github"></i> View Code</a>
                     </div>
                 </div>
             </div>
 
-            <div class="project-card reveal">
-                <div class="project-banner b2"><i class="fas fa-music"></i></div>
-                <div class="project-body">
+            <div class="project-card reveal" data-tilt data-spot>
+                <div class="project-top">
                     <div class="project-role">Solo Developer</div>
-                    <h3>Simon Game</h3>
-                    <p>A browser-based recreation of the classic Simon memory game. Players follow an ever-growing sequence of lights and sounds, with increasing difficulty each round.</p>
-                    <div class="project-problem">
-                        <span>What It Demonstrates</span>
-                        <p>jQuery event handling, game state logic, sequencing animations, and clean user feedback without a framework.</p>
-                    </div>
-                    <div class="tag-group" style="margin-bottom:.9rem">
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">jQuery</span>
-                        <span class="tag">HTML5</span>
-                        <span class="tag">CSS3</span>
-                    </div>
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="https://github.com/kbbortei1/Simon-Game" target="_blank" rel="noopener"><i class="fab fa-github"></i> View Code</a>
-                        </div>
+                    <div class="project-idx">05</div>
+                </div>
+                <h3>Simon Game</h3>
+                <p>A browser-based recreation of the classic Simon memory game. Players follow an ever-growing sequence of lights and sounds, with increasing difficulty each round.</p>
+                <div class="project-problem">
+                    <span>What It Demonstrates</span>
+                    <p>jQuery event handling, game state logic, sequencing animations, and clean user feedback without a framework.</p>
+                </div>
+                <div class="tag-group" style="margin-bottom:1.2rem">
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">jQuery</span>
+                    <span class="tag">HTML5</span>
+                    <span class="tag">CSS3</span>
+                </div>
+                <div class="project-footer">
+                    <div class="project-links">
+                        <a href="https://github.com/kbbortei1/Simon-Game" target="_blank" rel="noopener" data-label="Code"><i class="fab fa-github"></i> View Code</a>
                     </div>
                 </div>
             </div>
 
-            <div class="project-card reveal">
-                <div class="project-banner b6"><i class="fab fa-github"></i></div>
-                <div class="project-body">
+            <div class="project-card reveal" data-tilt data-spot>
+                <div class="project-top">
                     <div class="project-role">Explore More</div>
-                    <h3>More on GitHub</h3>
-                    <p>I'm always building. Check my GitHub for the full collection: experiments, tools, contributions, and in-progress projects that don't make the highlight reel.</p>
-                    <div class="project-problem">
-                        <span>Find Everything Here</span>
-                        <p>github.com/kbbortei1 has the full picture of what I'm working on.</p>
-                    </div>
-                    <div class="tag-group" style="margin-bottom:.9rem">
-                        <span class="tag">React</span>
-                        <span class="tag">Node.js</span>
-                        <span class="tag">Python</span>
-                        <span class="tag">+ More</span>
-                    </div>
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="https://github.com/kbbortei1" target="_blank" rel="noopener"><i class="fab fa-github"></i> Visit GitHub</a>
-                        </div>
+                    <div class="project-idx">06</div>
+                </div>
+                <h3>More on GitHub</h3>
+                <p>I'm always building. Check my GitHub for the full collection: experiments, tools, contributions, and in-progress projects that don't make the highlight reel.</p>
+                <div class="project-problem">
+                    <span>Find Everything Here</span>
+                    <p>github.com/kbbortei1 has the full picture of what I'm working on.</p>
+                </div>
+                <div class="tag-group" style="margin-bottom:1.2rem">
+                    <span class="tag">React</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">+ More</span>
+                </div>
+                <div class="project-footer">
+                    <div class="project-links">
+                        <a href="https://github.com/kbbortei1" target="_blank" rel="noopener" data-label="Open"><i class="fab fa-github"></i> Visit GitHub</a>
                     </div>
                 </div>
             </div>
@@ -610,11 +643,12 @@
      ================================================================ -->
 <section id="building">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="section-label">Currently Building</span>
-            <h2 class="section-title">Active work, right now</h2>
-            <p class="section-sub">These aren't past projects. They're what I'm actively shipping.</p>
+        <div class="sec-head">
+            <span class="kicker" data-num="">Currently Building</span>
+            <h2 class="sec-title" data-words>Active work, right now</h2>
+            <p class="sec-sub reveal">These aren't past projects. They're what I'm actively shipping.</p>
         </div>
+
         <div class="building-grid">
 
             <div class="build-card reveal">
@@ -622,8 +656,8 @@
                 <h3>Eukora</h3>
                 <div class="build-role">Founder &amp; Lead Developer</div>
                 <p>An AI-powered EdTech platform designed to personalise learning for students. Currently iterating on the mobile MVP and expanding the content engine.</p>
-                <a href="https://eukora.com" target="_blank" rel="noopener" class="build-link">
-                    <i class="fas fa-external-link-alt"></i> eukora.com
+                <a href="https://eukora.com" target="_blank" rel="noopener" class="build-link" data-label="Open">
+                    <i class="fas fa-arrow-up-right-from-square"></i> eukora.com
                 </a>
                 <div class="build-tag-row">
                     <span class="build-tag">React Native</span>
@@ -647,16 +681,14 @@
             </div>
 
             <div class="build-card reveal">
-                <div class="build-status" style="color:var(--amber-400)">
-                    <span class="pulse" style="background:var(--amber-400)"></span> Learning
-                </div>
+                <div class="build-status"><span class="pulse"></span> Learning</div>
                 <h3>Levelling Up</h3>
-                <div class="build-role" style="color:var(--amber-400)">What I'm studying right now</div>
+                <div class="build-role">What I'm studying right now</div>
                 <p>Deepening expertise in system design, cloud deployment, and testing. Sharpening prompt engineering skills to build smarter products faster.</p>
                 <div class="build-tag-row">
-                    <span class="build-tag" style="color:var(--amber-400);border-color:rgba(251,191,36,.2);background:rgba(251,191,36,.08)">System Design</span>
-                    <span class="build-tag" style="color:var(--amber-400);border-color:rgba(251,191,36,.2);background:rgba(251,191,36,.08)">Cloud (AWS/GCP)</span>
-                    <span class="build-tag" style="color:var(--amber-400);border-color:rgba(251,191,36,.2);background:rgba(251,191,36,.08)">Advanced Prompting</span>
+                    <span class="build-tag">System Design</span>
+                    <span class="build-tag">Cloud (AWS/GCP)</span>
+                    <span class="build-tag">Advanced Prompting</span>
                 </div>
             </div>
 
@@ -669,9 +701,14 @@
      ================================================================ -->
 <section id="github">
     <div class="container">
+        <div class="sec-head">
+            <span class="kicker" data-num="">Open Source</span>
+            <h2 class="sec-title" data-words>Find me on GitHub</h2>
+        </div>
+
         <div class="github-showcase">
             <div class="github-text reveal">
-                <h3>Find me on GitHub</h3>
+                <h3>The work lives in the commits.</h3>
                 <p>My GitHub is where the work lives. From startup code to experiments, you'll find the full breadth of what I build, not just the highlights.</p>
                 <div class="github-stats">
                     <div class="github-stat">
@@ -687,28 +724,28 @@
                         <span>Personal projects &amp; startup code</span>
                     </div>
                 </div>
-                <div style="margin-top:1.75rem">
-                    <a href="https://github.com/kbbortei1" target="_blank" rel="noopener" class="btn btn-primary">
-                        <i class="fab fa-github"></i> View GitHub Profile
-                    </a>
-                </div>
+                <a href="https://github.com/kbbortei1" target="_blank" rel="noopener" class="btn btn-primary" data-magnetic data-label="Open">
+                    <i class="fab fa-github"></i> View GitHub Profile
+                </a>
             </div>
+
             <div class="github-visual reveal">
-                <div class="gh-cmd">$ git clone https://github.com/kbbortei1</div>
+                <div class="gh-bar"><i></i><i></i><i></i></div>
+                <div class="gh-cmd">git clone https://github.com/kbbortei1</div>
                 <div class="gh-output">Cloning into 'kbbortei1'...</div>
                 <div class="gh-output">remote: Counting objects: done.</div>
                 <div class="gh-output">Receiving objects: 100% ✓</div>
                 <br>
-                <div class="gh-cmd">$ ls</div>
+                <div class="gh-cmd">ls</div>
                 <div class="gh-output">eukora/ &nbsp;&nbsp; chopa/ &nbsp;&nbsp; dicee/</div>
                 <div class="gh-output">react-projects/ &nbsp; mobile-apps/</div>
-                <div class="gh-output">inventory-mgmt/ &nbsp; experiments/</div>
+                <div class="gh-output">mini-social/ &nbsp; experiments/</div>
                 <br>
-                <div class="gh-cmd">$ git log --oneline</div>
+                <div class="gh-cmd">git log --oneline</div>
                 <div class="gh-output">f3c2a1b feat: AI recommendation engine</div>
                 <div class="gh-output">d8e4f2c fix: mobile nav on Android</div>
                 <div class="gh-output">a1b3c5d chore: refactor auth flow</div>
-                <div class="gh-comment">// Always building &#8599;</div>
+                <div class="gh-comment">// Always building</div>
             </div>
         </div>
     </div>
@@ -719,45 +756,53 @@
      ================================================================ -->
 <section id="contact">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="section-label">Contact</span>
-            <h2 class="section-title">Let's build something together</h2>
-            <p class="section-sub">Open to roles, collaborations, and conversations about interesting problems.</p>
+        <div class="sec-head">
+            <span class="kicker" data-num="">Contact</span>
+            <h2 class="sec-title" data-words>Let's build something together</h2>
+            <p class="sec-sub reveal">Open to roles, collaborations, and conversations about interesting problems.</p>
         </div>
+
         <div class="contact-grid">
 
             <div class="contact-left reveal">
                 <h3>Get In Touch</h3>
                 <p>Whether you're a recruiter with an opportunity, a founder looking to collaborate, or a developer who wants to connect, I'm always open to a good conversation.</p>
+
                 <div class="contact-items">
-                    <a href="mailto:officialkingbee2@gmail.com" class="contact-item">
-                        <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
-                        <div class="contact-item-text">
-                            <div class="ci-label">Email</div>
-                            <div class="ci-value">officialkingbee2@gmail.com</div>
-                        </div>
+                    <div class="contact-item">
+                        <span class="contact-item-icon"><i class="fas fa-envelope"></i></span>
+                        <span class="contact-item-text">
+                            <span class="ci-label">Email</span>
+                            <span class="ci-value">officialkingbee2@gmail.com</span>
+                        </span>
+                        <button type="button" class="copy" id="copy-email" data-email="officialkingbee2@gmail.com">Copy</button>
+                    </div>
+                    <a href="https://github.com/kbbortei1" target="_blank" rel="noopener" class="contact-item" data-label="Open">
+                        <span class="contact-item-icon"><i class="fab fa-github"></i></span>
+                        <span class="contact-item-text">
+                            <span class="ci-label">GitHub</span>
+                            <span class="ci-value">github.com/kbbortei1</span>
+                        </span>
                     </a>
-                    <a href="https://github.com/kbbortei1" target="_blank" rel="noopener" class="contact-item">
-                        <div class="contact-item-icon"><i class="fab fa-github"></i></div>
-                        <div class="contact-item-text">
-                            <div class="ci-label">GitHub</div>
-                            <div class="ci-value">github.com/kbbortei1</div>
-                        </div>
+                    <a href="https://www.linkedin.com/in/kwesi-bortei-652675356/" target="_blank" rel="noopener" class="contact-item" data-label="Open">
+                        <span class="contact-item-icon"><i class="fab fa-linkedin-in"></i></span>
+                        <span class="contact-item-text">
+                            <span class="ci-label">LinkedIn</span>
+                            <span class="ci-value">Kwesi Buabeng Bortei</span>
+                        </span>
                     </a>
-                    <a href="https://www.linkedin.com/in/kwesi-bortei-652675356/" target="_blank" rel="noopener" class="contact-item">
-                        <div class="contact-item-icon"><i class="fab fa-linkedin-in"></i></div>
-                        <div class="contact-item-text">
-                            <div class="ci-label">LinkedIn</div>
-                            <div class="ci-value">Kwesi Buabeng Bortei</div>
-                        </div>
+                    <a href="https://eukora.com" target="_blank" rel="noopener" class="contact-item" data-label="Open">
+                        <span class="contact-item-icon"><i class="fas fa-globe"></i></span>
+                        <span class="contact-item-text">
+                            <span class="ci-label">Startup</span>
+                            <span class="ci-value">eukora.com</span>
+                        </span>
                     </a>
-                    <a href="https://eukora.com" target="_blank" rel="noopener" class="contact-item">
-                        <div class="contact-item-icon"><i class="fas fa-globe"></i></div>
-                        <div class="contact-item-text">
-                            <div class="ci-label">Startup</div>
-                            <div class="ci-value">eukora.com</div>
-                        </div>
-                    </a>
+                </div>
+
+                <div class="local-time">
+                    <span class="dot"></span>
+                    <span id="local-time">Accra</span>
                 </div>
             </div>
 
@@ -777,11 +822,14 @@
                     </div>
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" name="message" placeholder="Tell me what you're working on..." required></textarea>
+                        <textarea id="message" name="message" maxlength="600" placeholder="Tell me what you're working on..." required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
-                        <i class="fas fa-paper-plane"></i> Send Message
-                    </button>
+                    <div class="form-foot">
+                        <span class="char-count" id="char-count">0 / 600</span>
+                        <button type="submit" class="btn btn-primary" data-magnetic>
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </div>
                 </form>
             </div>
 
@@ -794,12 +842,19 @@
      ================================================================ -->
 <footer>
     <div class="container">
-        <a href="#home" class="logo">&lt;KB /&gt;</a>
+        <a href="#home" class="logo" data-split>&lt;KB /&gt;</a>
         <p>Kwesi Buabeng Bortei &middot; Full-Stack Developer, Prompt Engineer &amp; Startup Engineer</p>
         <p>Built with <span>HTML, CSS &amp; JavaScript</span> &middot; &copy; <span id="footer-year"></span></p>
     </div>
 </footer>
 
+<button id="to-top" aria-label="Back to top">
+    <svg viewBox="0 0 48 48"><circle id="to-top-ring" cx="24" cy="24" r="23"></circle></svg>
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<script src="vendor/three.r134.min.js"></script>
+<script src="vendor/vanta.net.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
