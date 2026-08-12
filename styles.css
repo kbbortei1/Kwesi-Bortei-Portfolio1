@@ -1,5 +1,5 @@
 /* =====================================================================
-   KWESI BUABENG BORTEI — Portfolio Styles  (Dark Blue + Black Theme)
+   KWESI BUABENG BORTEI | Portfolio Styles  (Dark Blue + Black Theme)
    ===================================================================== */
 
 /* ── RESET & TOKENS ─────────────────────────────────────────────────── */
@@ -58,7 +58,7 @@ body {
     background: var(--bg-base);
     line-height: 1.65;
     overflow-x: hidden;
-    cursor: none; /* hide default cursor — we have the trail */
+    cursor: none; /* hide default cursor, we have the trail */
 }
 
 /* Re-show cursor on touch / coarse-pointer devices */
@@ -409,7 +409,7 @@ nav {
     z-index: 4;
 }
 
-/* Orb A — medium blue, fast inner orbit */
+/* Orb A: medium blue, fast inner orbit */
 .orb-a {
     width: 12px; height: 12px;
     margin: -6px 0 0 -6px;
@@ -418,7 +418,7 @@ nav {
     animation: orb-a 7s linear infinite;
 }
 
-/* Orb B — large pale blue, slow outer orbit, counter-clockwise */
+/* Orb B: large pale blue, slow outer orbit, counter-clockwise */
 .orb-b {
     width: 20px; height: 20px;
     margin: -10px 0 0 -10px;
@@ -428,7 +428,7 @@ nav {
     animation-delay: -4.3s;
 }
 
-/* Orb C — tiny bright, fast inner orbit */
+/* Orb C: tiny bright, fast inner orbit */
 .orb-c {
     width: 8px; height: 8px;
     margin: -4px 0 0 -4px;
@@ -438,7 +438,7 @@ nav {
     animation-delay: -1.7s;
 }
 
-/* Orb D — indigo medium, medium orbit counter-clockwise */
+/* Orb D: indigo medium, medium orbit counter-clockwise */
 .orb-d {
     width: 14px; height: 14px;
     margin: -7px 0 0 -7px;
@@ -448,7 +448,7 @@ nav {
     animation-delay: -5s;
 }
 
-/* Orb E — large dim, very slow outer orbit */
+/* Orb E: large dim, very slow outer orbit */
 .orb-e {
     width: 10px; height: 10px;
     margin: -5px 0 0 -5px;
@@ -458,7 +458,7 @@ nav {
     animation-delay: -10s;
 }
 
-/* Orb F — tiny lavender */
+/* Orb F: tiny lavender */
 .orb-f {
     width: 7px; height: 7px;
     margin: -3.5px 0 0 -3.5px;

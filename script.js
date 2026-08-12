@@ -1,5 +1,5 @@
 /* =====================================================================
-   KWESI BUABENG BORTEI — Portfolio Scripts
+   KWESI BUABENG BORTEI | Portfolio Scripts
    ===================================================================== */
 
 (function () {
